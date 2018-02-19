@@ -1,1 +1,1 @@
-# MDT smart contracts
+# MDT Smart Contracts
