@@ -1,0 +1,46 @@
+.wrapper {width: 720px;}
+#simple-top-nav {height: 60px; padding: 10px 0;}
+.simple-top {margin-top: 80px;}
+.col-12 {display: block;}
+.white {background-color: #FFFFFF;}
+button:disabled,
+button[disabled]{
+  background-color: #ccc;
+}
+p#logo-text {color: #5d9bec; font-weight: 400; padding: 10px 6px; display: inline-block;}
+form {padding: 0;}
+.form-group {margin:10px auto;display: table;}
+.alert {width: 420px; margin: 10px auto;padding: 5px 15px;}
+
+/* for progress tracking */
+.progress-wrapper {width: 420px; margin: 10px auto; display: block; position: relative;}
+.timeline {position: absolute; width: 3px; background-color: #DDDDDD; height: 90%; left: 17px; top: 30px; z-index: -1;}
+.private-sale-progress, .early-bird-progress, .late-bird-progress {display: block; margin-top: 40px;}
+.progress-wrapper span {font-size: 10pt;}
+.progress-row {display: inline-block; width: 100%;}
+.progress-row .progress-card {padding-top: 10px; padding-bottom: 10px; border-radius: 1px; display: block;} 
+.progress-row .status-badge {width: 36px; height: 36px; border-radius: 50%; border: 1px solid #DDDDDD; background-color: #FFFFFF; margin: 25px 2px 0 0;}
+.progress-done .status-badge {border: 1px solid #5d9bec; background-color: #5d9bec; background-image: url(img/done-10.png); background-repeat: no-repeat; background-size: 20px;background-position: center;}
+.progress-card span {display: inline-block; margin: 0 3px; font-weight: 300; }
+.progress-notsure .status-badge {background-color: #DDDDDD;}
+/* END */
+
+
+#submit-wallet {display: block;}
+.border-4 {border-radius: 4px;}
+#website {display: none;}
+#wallet-address {width: 280px; height: 40px; padding: 6px 12px; font-size: 11pt;line-height: 1.333333; color: #555; background-color: #fff; background-image: none; border: transparent; border-radius: 4px;}
+
+@media screen and (max-width:768px) {
+    .wrapper {max-width: 320px;width: 100%;}
+    .alert {width: 320px;}
+    #wallet-address {width: 280px;}
+    p#logo-text {font-size: 10pt; padding: 15px 6px;}
+    .progress-wrapper {width: 320px;}
+    .progress-row {width: 300px; margin: 0 auto;}
+    
+    .col-2, .col-10 {padding-left: 5px; padding-right: 5px;}
+    .col-10 {width: 100px;!important}
+    #timeline  {left: 33px;}
+
+}

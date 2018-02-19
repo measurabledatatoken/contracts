@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <!-- From Bootstrap Template -->
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="keywords" content="MDT,Big data,Blockchain,Ethereum,Decentralized data exchange economy,measurable" />
+        <meta property="og:title" content="Measurable Data Token">
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="https://measurable.net/index.html">
+        <meta property="og:image" content="https://measurable.net/img/mdt_preview.png">
+        <meta property="og:description" content="Decentralized Data Exchange Economy">
+        <meta name="description" content="Decentralized Data Exchange Economy" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+        <!-- Bootstrap -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <!-- Customize Stylesheet -->
+        <link rel="stylesheet" href="main.css">
+        <link href="style.css" rel="stylesheet">
+        <!--New Favicon-->
+        <link rel="apple-touch-icon-precomposed" sizes="57x57" href="favicon/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicon/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicon/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicon/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="favicon/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="favicon/apple-touch-icon-152x152.png" />
+        <link rel="icon" type="image/png" href="favicon/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="favicon/favicon-16x16.png" sizes="16x16" />
+        <meta name="msapplication-TileImage" content="favicon/mstile-144x144.png" />
+        <link rel="icon" type="image/x-icon" href="favicon/favicon.ico" />
+        <title>MDT Lock Up 量数币锁仓</title>
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            .user-wallet {
+                word-wrap: break-word;
+            }
+
+            .hide {
+                display: none;
+            }
+
+            .loader {
+                text-indent: -9999em;
+                border: 5px solid #f3f3f3;
+                -webkit-animation: spin 1s linear infinite;
+                animation: spin 1s linear infinite;
+                border-top: 5px solid #609DE9;
+                border-radius: 50%;
+                width: 50px;
+                height: 50px;
+                margin: 10px auto;
+            }
+
+            @-webkit-keyframes spin {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                    -ms-transform: rotate(0deg);
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    -webkit-transform: rotate(360deg);
+                    -ms-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                }
+            }
+
+            @keyframes spin {
+                0% {
+                    -webkit-transform: rotate(0deg);
+                    -ms-transform: rotate(0deg);
+                    transform: rotate(0deg);
+                }
+
+                100% {
+                    -webkit-transform: rotate(360deg);
+                    -ms-transform: rotate(360deg);
+                    transform: rotate(360deg);
+                }
+            }
+
+            /* dirty hacks */
+            @media screen and (max-width: 768px) {
+                .alert {width: 300px;}
+            }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar navbar-inverse">
+            <div id="simple-top-nav">
+                <div class="container wrapper">
+                    <div id="nav-logo" class="pull-left">
+                        <a href="index.html">
+                        <img src="img/mdt_logo.png">
+                        </a>
+                    </div>
+                    <p id="logo-text">Measurable Data Token 量数币</p>
+                </div>
+            </div>
+        </nav>
+        <section id="lockup-header-section" class="simple-top">
+            <div class="container wrapper">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center">Lock Up Your Tokens<br>MDT 锁仓赠币</h1>
+                        <p>Please complete the following 3 steps for token lock-up.<br>Before you start, please make sure that you have MetaMask installed and your wallet imported. <em>This webpage is the ONLY way to get lockup bonus.</em>
+                            <br>
+                            请通过以下三个步骤完成量数币 MDT 锁币。<br>请确保您已安装 MetaMask 并成功导入了您的钱包。<em>本网页为 MDT 锁币唯一方式，请勿使用其他方式进行锁币</em>。
+                        </p>
+                        <p><em>Please be aware</em> that the lock-up is a one-time option. You may only lock-up a specific portion of your MDT for one designated period all at once.
+                            <br>
+                            <em>请注意，锁币活动只能操作一次，提交后不可更改。</em>
+                        </p>
+                        <!-- Div for wallet address text -->
+                        <div id="lockup-section-wallet-info" class="text-center">
+                            <p>Your Account in MetaMask 您在 MetaMask 所选的地址: </p>
+                            <p class="gray"><span class="user-wallet">&nbsp;</span></p>
+                        </div>
+                        <div id="lockup-section-loader" class="loader"></div>
+                        <!--/ end Div-->
+                        <!-- This Div appears when the user has the correct wallet address AND has not locked up MDT yet. -->
+                        <div id="success-available" class="collapse">
+                            <p>You currently have <em><span class="available-mdt">9,000</span> MDT</em> eligible for lock-up. Your personal max for the lock-up is <em><span class="max-mdt">9,000</span> MDT</em><br>您的钱包中有<em><span class="available-mdt">9,000</span> MDT</em>可以参与本活动。您个人可锁最高份额为<em><span class="max-mdt">9,000</span> MDT</em>。</p>
+                            <p><small>This webpage is only for Early Bird and Late Bird tokens. If you want to lock up tokens from Private sale, please contact us.
+                                <br>
+                                您只能在本网页进行早鸟与晚鸟的锁仓操作，如您想对私募的份额进行锁仓，请与我们联系。</small>
+                            </p>
+                        </div>
+                        <!-- / end Div "success-available" -->
+                    </div>
+                </div>
+            </div>
+            <!-- MetaMask not installed  -->
+            <div class="alert alert-danger alert-no-metamask collapse" role="alert">
+                <p><em>Sorry<br>抱歉</em> <br>Please install MetaMask and import your wallet. <br>请先安装 MetaMask 并导入您的钱包。<a href="https://mp.weixin.qq.com/s/Fgt0rJEgrbZn2pVowhvciA" target="_blank">教程↗</a></p>
+            </div>
+            <!-- MetaMask locked -->
+            <div class="alert alert-danger alert-metamask-locked collapse" role="alert">
+                <p><em>Cannot find address!<br>找不到您的账号！</em> <br>Please unlock your MetaMask and refresh. <br>请解锁您的 MetaMask 账号，然后刷新页面。</p>
+            </div>
+            <!-- Failed loading smart contracts -->
+            <div class="alert alert-danger alert-contract-error collapse" role="alert">
+                <p>
+                    <em>Failed loading contract!<br>未能加载智能合约！</em>
+                    <br>Please make sure that you have connected to the main Ethereum network in MetaMask.
+                    <br>请检查你的MetaMask是否已连接Ethereum主网。
+                </p>
+            </div>
+            <!-- MetaMask installed but Wallet Address not correct -->
+            <div class="alert alert-danger alert-no-record collapse" role="alert">
+                <p><em>Sorry<br>抱歉</em> <br>The address has not participated in Early/Late Bird. Please import and select the wallet address  that you used in MDT token sales. <br>您所选的钱包没有参与过早鸟或晚鸟。请在 MetaMask 中导入并选择您参加过代币分发活动的钱包。</p>
+            </div>
+            <!-- MetaMask installed, Wallet correct, MDT <625-->
+            <div class="alert alert-danger alert-mdt-min collapse" role="alert">
+                <p><em>Sorry<br>抱歉</em> <br>You don't have enough MDT for the lockup. Minimum is 625 MDT. <br>您的钱包余额不足。锁仓最低 625 MDT。</p>
+            </div>
+            <!-- Wallet already locked up MDT before -->
+            <div class="alert alert-success alert-already-locked collapse" role="alert">
+                <p>This address has already participated in the lockup. Please check your locked up tokens below. <br>您所选择的钱包地址已经进行过锁币操作。请在下方查看您的锁币动态。</p>
+            </div>
+            <!-- Unknown system error -->
+            <div class="alert alert-danger alert-system-error collapse" role="alert">
+                <p><em>System error!<br>系统错误！</em> <br>Please try again later. <br>请稍后再试。</p>
+            </div>
+        </section>
+        <!-- input element in "lockup-section" is disabled. It is abled only when the user has correct wallet address with MDT available to lockup, AND when MetaMask is installed -->
+        <!-- ONLY If the User has locked up, "lock-section" will NOT DISPLAY -->
+        <div id="lockup-steps-section">
+            <section class="lockup-section">
+                <div class="container wrapper">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <span class="badge lockup-step">1</span>
+                            <p>Please select the amount of MDT that you want to lock up. Minimum 625 MDT. Maximum the amount that you currently have eligible.
+                                <br>
+                                请选择您想要锁的 MDT 数额。最低 625 MDT。<br>最多不可超过您目前钱包中可参与活动的份额。
+                            </p>
+                            <p> Customize amount 自定义数量：</p>
+                            <div class="input-group" id="form-amount">
+                                <input type="text" id="input-lock-amount" class="form-control text-right" placeholder="625.00" aria-describedby="basic-addon2" disabled>
+                                <span class="input-group-addon" id="basic-addon2">MDT</span>
+                            </div>
+                            <p> OR 或者</p>
+                            <button class="btn btn-info" id="lockall-button" disabled>Lock All My MDT 锁定所有 MDT</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- MDT Amount Error. Appears when MDT amount is too small or larger than the user's maximum -->
+                <div id="mdt-amount-error" class="alert alert-danger collapse" role="alert">
+                    <span class="sr-only">Error:</span>
+                    <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> MDT amount not valid. 输入数额有误。</p>
+                </div>
+            </section>
+            <!-- input element in "lockup-section" is disabled. It is abled only when the user has correct wallet address with MDT available to lockup, AND when MetaMask is installed -->
+            <!-- ONLY If the User has locked up, "lock-section" will NOT DISPLAY -->
+            <section class="lockup-section">
+                <div class="container wrapper">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <span class="lockup-step">2</span>
+                            <p>Please select your preferred lock-up period.<br>
+                                请选择锁仓时长。
+                            </p>
+                            <form id="lockup-form">
+                                <div>
+                                    <label id="three-m" class="lockup-option">
+                                        <input type="radio" id="three-month" name="lockup-option" value="0x00" disabled>
+                                        <span class="bonus-time" for="three-month">3-month 三个月</span>
+                                        <span class="bonus-rate">Bonus Rate 奖励比例: 10%</span>
+                                    </label>
+                                    <label id="six-m" class="lockup-option">
+                                        <input type="radio" id="six-month" name="lockup-option" value="0x01" disabled>
+                                        <span class="bonus-time" for="six-month">6-month 六个月</span>
+                                        <span class="bonus-rate">Bonus Rate 奖励比例: 30%</span>
+                                    </label>
+                                    <label id="one-y" class="lockup-option">
+                                        <input type="radio" id="one-year" name="lockup-option" value="0x02" disabled>
+                                        <span class="bonus-time" for="one-year">1-year 一年</span>
+                                        <span class="bonus-rate">Bonus Rate 奖励比例: 66%</span>
+                                    </label>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- ONLY If the User has locked up, "lock-section" will NOT DISPLAY -->
+            <section class="lockup-section">
+                <div class="container wrapper">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <span class="badge lockup-step">3</span>
+                            <p>Confirmation 确认</p>
+                            <!-- When the user has selected a right combination, this message appears -->
+                            <div id="lockup-confirmation" class="collapse">
+                                <p>You have chosen to lock up <em><span class="lockup-mdt">1,000</span> MDT</em>, for the period of <em><span class="lockup-time">12</span></em> months. You can receive <em><span class="lockup-final">1,660</span> MDT</em> when the lock-up ends. If this is correct, please click "Confirm and Lock" and complete the lock-up in MetaMask. <br>您选择了锁 <em><span class="lockup-mdt">1,000</span> MDT</em> ，锁<em><span class="lockup-time">12</span></em>个月。在锁定期结束后可以获得<em><span class="lockup-final">1,660</span> MDT</em>。确认无误后请点击“确认并锁币”，在 Metamask 中完成锁币流程。</p>
+                            </div>
+                            <!-- When the user hasn't selected a right combination, this message appears -->
+                            <div id="lockup-combination-error" role="alert" class="bottom-40">
+                                <span class="sr-only">Error:</span>
+                                <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> You have not entered/selected an effective combination. <br>您尚未选择有效的锁币组合。</p>
+                            </div>
+                            <!-- This confirm button is disabled until the user has a correct combination and MetaMask is installed -->
+                            <button id="confirm-button" class="btn btn-blue" disabled>Confirm and Lock 确认并锁币</button>
+                            <p><small>By clicking "Confirm and Lock" you agree to the rules of <a href="bonus_rules.html" target="_blank">MDT Bonus Giveaway Campaign</a>.<br> The lock-up is a one-time action and is not reversible. <br> 点击“确认并锁币”代表您同意<a href="cn/bonus_rules.html" target="_blank">量数币 MDT 锁仓赠币计划</a>。<br>锁仓只可操作一次，提交后不可修改。 </small></p>
+                            <div id="confirm-loader" class="loader collapse"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Success Message -->
+            <div id="alert-lockup-success" class="alert alert-success collapse" role="alert" >
+                <p><em>Success!<br>成功</em> <br>You successfully locked up your tokens. You can see your record below.<br>
+                    您成功的参与了锁仓赠币活动。您可在下方查看。
+                </p>
+            </div>
+            <!-- Bad internet connection or unknown error -->
+            <!-- <div class="alert alert-warning" role="alert">
+                <p><em>Something's wrong ...<br> 出错了。。。</em> <br>Your attempt did not go through. Please try again.<br>请尝试重新提交。</p>
+            </div> -->
+            <!-- Lock fail -->
+            <div id="alert-lockup-fail" class="alert alert-danger collapse" role="alert">
+                <p><em>Sorry<br>抱歉</em> <br>Failed to lock up tokens. Please check your network connection, make sure that you have enough MDT in your wallet and try again.<br>
+                锁币失败！请检查你的网络，并确认你的钱包有足够MDT，然後重新提交。</p>
+            </div>
+        </div>
+
+        <section id="locked-tokens-section">
+            <div class="container wrapper">
+                <div class="row">
+                    <div class="col-12">
+                        <h1 class="text-center">Your Locked Up Tokens<br>MDT 锁币动态</h1>
+                        <div id="locked-tokens-section-after" class="collapse">
+                            <!-- Div for when lock up is ended after 2/10 -->
+                            <p>The lock-up event has ended on Febuary 10, 2018. You may only track or withdraw your tokens below.<br>
+                                锁币活动已经结束。您可以在下方查看锁币动态，或取出代币。
+                            </p>
+                            <!-- Div for wallet address text. After 2/10 -->
+                            <div id="locked-tokens-section-wallet-info" class="text-center">
+                                <p>Your Account in MetaMask 您在 MetaMask 所选的地址: </p>
+                                <p class="gray"><span class="user-wallet">&nbsp;</span></p>
+                            </div>
+                            <div id="locked-tokens-section-loader" class="loader"></div>
+                            <!--/ end Div-->
+                            <!-- MetaMask not installed. After 2/10 -->
+                            <div class="alert alert-danger alert-no-metamask collapse" role="alert">
+                                <p><em>Sorry<br>抱歉</em> <br>Please install MetaMask and import your wallet. <br>请先安装 MetaMask 并导入您的钱包。<a href="https://mp.weixin.qq.com/s/Fgt0rJEgrbZn2pVowhvciA" target="_blank">教程↗</a></p>
+                            </div>
+                            <!-- MetaMask locked, After 2/10 -->
+                            <div id="alert-locked" class="alert alert-danger alert-metamask-locked collapse" role="alert">
+                                <p><em>Cannot find address!<br>找不到您的账号！</em> <br>Please unlock your MetaMask and refresh. <br>请解锁您的 MetaMask 账号，然后刷新页面。</p>
+                            </div>
+                            <!-- Failed loading smart contracts -->
+                            <div class="alert alert-danger alert-contract-error collapse" role="alert">
+                                <p>
+                                    <em>Failed loading contract!<br>未能加载智能合约！</em>
+                                    <br>Please make sure that you have connected to the main Ethereum network in MetaMask.
+                                    <br>请检查你的MetaMask是否已连接Ethereum主网。
+                                </p>
+                            </div>
+                            <!-- MetaMask installed but Wallet Address not correct. After 2/10 -->
+                            <div class="alert alert-danger alert-no-record collapse" role="alert">
+                                <p><em>Sorry<br>抱歉</em> <br>The address has not participated in Early/Late Bird. Please import and select the wallet address  that you used in MDT token sales. <br>您所选的钱包没有参与过早鸟或晚鸟。请在 MetaMask 中导入并选择您参加过代币分发活动的钱包。</p>
+                            </div>
+                            <!-- Unknown system error -->
+                            <div class="alert alert-danger alert-system-error collapse" role="alert">
+                                <p><em>System error!<br>系统错误！</em> <br>Please try again later. <br>请稍后再试。</p>
+                            </div>
+                        </div>
+                        <!-- When the user has NO locked up tokens -->
+                        <div id="tokens-not-locked-error" role="alert" class="text-center collapse">
+                            <span class="sr-only">Error:</span>
+                            <p><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> You have not locked up any tokens. <br>您没有进行锁币操作。</p>
+                        </div>
+                        <!-- Transaction Record, Early/Late Bird-->
+                        <div id="bird-lockup" class="bottom-40 collapse">
+                            <div class="text-center">
+                                <h2>Your Early/Late Bird Lock-up 早/晚鸟锁仓</h2>
+                                <p>Lock-up Amount <br> 锁币额度:<br> <em><span class="locked-mdt">1,000</span> MDT</em>
+                                </p>
+                                <p>
+                                    Lock-up Period <br>锁仓时长: <br><em><span class="locked-time">12</span> Months/月</em>
+                                </p>
+                                <p>Your will be able to withdraw your locked tokens and bonus on <em><span class="withdraw-en">Febuary 8, 2019</span></em>. Total amount: <em><span class="locked-final">1,660</span> MDT</em>.
+                                    <br>
+                                    您可以在<em><span class="withdraw-cn">2018年5月8日</span></em>取出您锁定的代币和奖励，共计<em><span class="locked-final">1,660</span> MDT</em>。
+                                </p>
+                                <button class="btn btn-blue withdraw-button" disabled>Withdraw 取出代币</button>
+                            </div>
+                            <div class="loader collapse"></div>
+                            <!-- Withdraw success -->
+                            <div class="alert alert-success alert-withdraw-success collapse" role="alert" >
+                                <p><em>Success!<br>成功</em> <br>You successfully withdrew your tokens. Please check your wallet.<br>
+                                    您已成功取出代币和奖励！请查看你的钱包。
+                                </p>
+                            </div>
+                            <!-- Withdraw fail -->
+                            <div class="alert alert-danger alert-withdraw-fail collapse" role="alert">
+                                <p><em>Sorry<br>抱歉</em> <br>Failed to withdraw tokens! Please check your network connection and try again later. <br>未能取出代币！请检查你的网络并重新提交。</p>
+                            </div>
+                            <!-- Already withdrew -->
+                            <div class="alert alert-success alert-already-withdrew collapse" role="alert">
+                                <p>You already withdrew your tokens on <em><span class="withdraw-en">August 4, 2018</span></em>.<br>
+                                    您已在<em><span class="withdraw-cn">2018年8月4日</span></em>取出代币和奖励。
+                                </p>
+                            </div>
+                            <hr id="bird-lockup-divider">
+                        </div>
+                        <!-- Transaction Record, Private Sale -->
+                        <div id="private-lockup" class="bottom-40 collapse">
+                            <div class="text-center">
+                                <h2>Your Private Sale Lock-up 私募锁仓</h2>
+                                <p>Lock-up Amount <br> 锁币额度:<br> <em><span class="locked-mdt">10,000</span> MDT</em>
+                                </p>
+                                <p>
+                                    Lock-up Period <br>锁仓时长: <br><em><span class="locked-time">6</span> Months/月</em>
+                                </p>
+                                <p>Your will be able to withdraw your locked tokens and bonus on <em><span class="withdraw-en">August 4, 2018</span></em>. Total amount: <em><span class="locked-final">13,000</span> MDT</em>.
+                                    <br>
+                                    您可以在<em><span class="withdraw-cn">2018年5月8日</span></em>取出您锁定的代币和奖励，共计<em><span class="locked-final">13,000</span> MDT</em>。
+                                </p>
+                                <button class="btn btn-blue withdraw-button" disabled>Withdraw 取出代币</button>
+                                <br>
+                            </div>
+                            <div class="loader collapse"></div>
+                            <!-- Withdraw success -->
+                            <div class="alert alert-success alert-withdraw-success collapse" role="alert" >
+                                <p><em>Success!<br>成功</em> <br>You successfully withdrew your tokens. Please check your wallet.<br>
+                                    您已成功取出代币和奖励！请查看你的钱包。
+                                </p>
+                            </div>
+                            <!-- Withdraw fail -->
+                            <div class="alert alert-danger alert-withdraw-fail collapse" role="alert">
+                                <p><em>Sorry<br>抱歉</em> <br>Failed to withdraw tokens! Please check your network connection and try again later. <br>未能取出代币！请检查你的网络并重新提交。</p>
+                            </div>
+                            <!-- Already withdrew -->
+                            <div class="alert alert-success alert-already-withdrew collapse" role="alert">
+                                <p>You already withdrew your tokens on <em><span class="withdraw-en">August 4, 2018</span></em>.<br>
+                                    您已在<em><span class="withdraw-cn">2018年8月4日</span></em>取出代币和奖励。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="dark white-text simple-top">
+            <div class="container text-center">
+                <div class="row">
+                    <div id="company-info">
+                        <div id="logo-white"></div>
+                        <div class="info">
+                            <ul >
+                                <li>
+                                    <p><small>© 2017 Measurable Foundation Ltd.<br>UEN 201728042H<br>22 NORTH CANAL ROAD #02-00 SINGAPORE 048834</small></p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- <script src="js/bootstrap.min.js"></script> -->
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="js/jquery-3.2.1.min.js"></script>
+        <script src="js/web3.min.js"></script>
+        <script src="js/truffle-contract.min.js"></script>
+        <script src="js/token-lockup-contract.js"></script>
+        <script src="js/token-lockup.js"></script>
+    </body>
+</html>
