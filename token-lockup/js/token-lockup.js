@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
   var MIN_LOCKUP_AMOUNT = 625;
   var LOCKUP_END = true;
 
@@ -26,12 +26,13 @@ $(function() {
     var monthIndex = date.getMonth();
     var year = date.getFullYear();
 
-    return lang === 'cn' ? year + '年' + (monthIndex+1) + '月' + day + '日' :
-      monthNames[monthIndex] + ' ' + day  + ', ' + year ;
+    return lang === 'cn' ? year + '年' + (monthIndex + 1) + '月' + day + '日' :
+      monthNames[monthIndex] + ' ' + day + ', ' + year;
   }
 
   var validNumber = new RegExp(/^\d*\.?\d*$/);
   var lastValid = document.getElementById('input-lock-amount').value;
+
   function validateNumber(elem) {
     if (validNumber.test(elem.value)) {
       lastValid = elem.value;
@@ -120,11 +121,11 @@ $(function() {
     $('#alert-lockup-fail').hide();
   }
 
-  $('form').submit(function(e) {
+  $('form').submit(function (e) {
     e.preventDefault();
   });
 
-  $('#input-lock-amount').on('input', function() {
+  $('#input-lock-amount').on('input', function () {
     hideLockupConfirmationAlert();
     validateNumber(this);
     // show alert if the input is invalid
@@ -132,7 +133,7 @@ $(function() {
   });
 
   // lockup option on change event
-  $('#lockup-form input[type=radio][name=lockup-option]').change(function() {
+  $('#lockup-form input[type=radio][name=lockup-option]').change(function () {
     hideLockupConfirmationAlert();
     updateConfirmationSection();
   });
@@ -140,7 +141,7 @@ $(function() {
   // $('#lockall-button').prop('disabled', false);
 
   // Lock all button
-  $('#lockall-button').click(function() {
+  $('#lockall-button').click(function () {
     hideLockupConfirmationAlert();
     var maxAvailableAmount = TokenLockupApp.getAvailableLockupAmount();
     $('#input-lock-amount').val(maxAvailableAmount);
@@ -148,7 +149,7 @@ $(function() {
   });
 
   // confirm and lock button
-  $('#confirm-button').click(function() {
+  $('#confirm-button').click(function () {
     var lockupAmount = web3.toWei(parseFloat($('#input-lock-amount').val()));
     // console.log('lockup amount:', lockupAmount);
     var lockupPeriod = $('#lockup-form input[type=radio][name=lockup-option]:checked').val();
@@ -166,10 +167,10 @@ $(function() {
 
     // lock tokens
     TokenLockupApp.lockupTokens(lockupAmount, lockupPeriod)
-      .catch(function(err) {
-        console.log(err);
+      .catch(function (err) {
+        // console.log(err);
         return false;
-      }).then(function(success) {
+      }).then(function (success) {
         if (success) {
           $('#alert-lockup-success').show();
           // update locked tokens section
@@ -179,7 +180,7 @@ $(function() {
           setLockupStepsSectionEnabled(true);
           $('#confirm-button').prop('disabled', false);
         }
-      }).then(function() {
+      }).then(function () {
         // hide loader
         $('#confirm-loader').hide();
       });
@@ -194,29 +195,36 @@ $(function() {
     // show loader
     $(sectionID + ' .loader').show();
     TokenLockupApp.withdrawTokens(isPrivateSale)
-      .catch(function(err) {
-        console.log(err);
-        return false;
-      }).then(function(success) {
-        if (success) {
-          $(sectionID + ' .alert-withdraw-success').show();
+      .catch(function (err) {
+        // console.log(err);
+        return {
+          success: true,
+          delay: true
+        };
+      }).then(function (result) {
+        if (result.success) {
+          if (result.delay) {
+            $(sectionID + ' .alert-withdraw-delay').show();
+          } else {
+            $(sectionID + ' .alert-withdraw-success').show();
+          }
         } else {
           $(sectionID + ' .alert-withdraw-fail').show();
           $(sectionID + ' button').prop('disabled', false);
         }
-      }).then(function() {
+      }).then(function () {
         // hide loader
         $(sectionID + ' .loader').hide();
       });
   }
 
   // early and late bird token withdraw button
-  $('#bird-lockup button').click(function() {
+  $('#bird-lockup button').click(function () {
     withdrawTokens(false);
   });
 
   // private sale token withdraw button
-  $('#private-lockup button').click(function() {
+  $('#private-lockup button').click(function () {
     withdrawTokens(true);
   });
 
@@ -350,7 +358,7 @@ $(function() {
   var MDTOEKN_LOCKUP_CONTRACT_ABI_URL = 'MDTokenLockup.json';
 
   TokenLockupApp.init(MDTOKEN_CONTRACT_ADDRESS, MDTOKEN_CONTRACT_ABI_URL, MDTOEKN_LOCKUP_CONTRACT_ADDRESS, MDTOEKN_LOCKUP_CONTRACT_ABI_URL)
-    .then(function() {
+    .then(function () {
       updateLockedTokensSection();
 
       if (isEventEnded()) {
@@ -374,14 +382,14 @@ $(function() {
           setLockupStepsSectionEnabled(true);
         }
       }
-    }).catch(function(error) {
-      console.log(error.type, error);
+    }).catch(function (error) {
+      // console.log(error.type, error);
       handleError(error);
       // hacks to prevent the tokens not locked message shown before the alert
       if (isEventEnded()) {
         $('#tokens-not-locked-error').hide();
       }
-    }).then(function() {
+    }).then(function () {
       hideAppLoader();
       showAccountAddress();
     });

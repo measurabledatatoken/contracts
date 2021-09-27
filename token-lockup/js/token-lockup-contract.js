@@ -24,8 +24,10 @@ CustomException.prototype = Object.create(Error.prototype);
 CustomException.prototype.name = "CustomException";
 CustomException.prototype.constructor = CustomException;
 
-Date.prototype.getUnixTime = function() { return this.getTime()/1000|0; };
-Date.prototype.addDays = function(numberOfDays) {
+Date.prototype.getUnixTime = function () {
+  return this.getTime() / 1000 | 0;
+};
+Date.prototype.addDays = function (numberOfDays) {
   return new Date(this.getTime() + (numberOfDays * 24 * 60 * 60 * 1000));
 };
 
@@ -83,10 +85,26 @@ window.TokenLockupApp = {
       .then(this.loadContractState);
   },
 
-  initWeb3: function() {
+  initWeb3: function () {
     var self = this;
-    return new Promise(function(resolve, reject) {
-      if (typeof web3 !== 'undefined') {
+    return new Promise(function (resolve, reject) {
+      if (typeof ethereum !== 'undefined') {
+        window.web3 = new Web3(ethereum);
+        // Asks the user for permission to connect to the metamask account.
+        ethereum.request({ method: 'eth_requestAccounts' })
+          .then(function (accounts) {
+            var account = accounts[0];
+            if (account === undefined) {
+              reject(self.formatError('Account not found, please unlock your Metamask account', AppError.METAMASK_LOCKED));
+            } else {
+              resolve(web3);
+            }
+          })
+          .catch(function (reason) {
+            // Handle error. Likely the user rejected the login.
+            reject(self.formatError('Account not found, please unlock your Metamask account', AppError.METAMASK_LOCKED));
+          })
+      } else if (typeof web3 !== 'undefined') {
         window.web3 = new Web3(web3.currentProvider);
         resolve(web3);
       } else {
@@ -95,10 +113,10 @@ window.TokenLockupApp = {
     });
   },
 
-  initTokenLockupContract: function() {
+  initTokenLockupContract: function () {
     var self = this;
-    return new Promise(function(resolve, reject) {
-      $.getJSON(self.lockupContractAbiUrl, function(abi) {
+    return new Promise(function (resolve, reject) {
+      $.getJSON(self.lockupContractAbiUrl, function (abi) {
         try {
           // Get the necessary contract artifact file and instantiate it with truffle-contract.
           self.LockupContract = TruffleContract(abi);
@@ -106,26 +124,27 @@ window.TokenLockupApp = {
           // Set the provider for our contract.
           self.LockupContract.setProvider(web3.currentProvider);
 
-          self.LockupContract.at(self.lockupContractAddress).then(function(instance) {
+          // Load the lockup contract.
+          self.LockupContract.at(self.lockupContractAddress).then(function (instance) {
             self.lockupContract = instance;
             console.log('Lockup contract loaded successfully.');
             resolve(instance);
-          }).catch(function(err) {
+          }).catch(function (err) {
             reject(self.formatError(err, AppError.FAILED_LOADING_CONTRACT));
           });
         } catch (ex) {
           reject(self.formatError('Error in accessing token lockup contract! ' + ex.valueOf(), AppError.FAILED_LOADING_CONTRACT));
         }
-      }).fail(function() {
+      }).fail(function () {
         reject(self.formatError('Failed loading token lockup contract!'));
       });
     });
   },
 
-  initMDTokenContract: function() {
+  initMDTokenContract: function () {
     var self = this;
-    return new Promise(function(resolve, reject) {
-      $.getJSON(self.tokenContractAbiUrl, function(abi) {
+    return new Promise(function (resolve, reject) {
+      $.getJSON(self.tokenContractAbiUrl, function (abi) {
         try {
           // Get the necessary contract artifact file and instantiate it with truffle-contract.
           self.TokenContract = TruffleContract(abi);
@@ -133,26 +152,28 @@ window.TokenLockupApp = {
           // Set the provider for our contract.
           self.TokenContract.setProvider(web3.currentProvider);
 
-          self.TokenContract.at(self.tokenContractAddress).then(function(instance) {
+          // Load the token contract.
+          self.TokenContract.at(self.tokenContractAddress).then(function (instance) {
             self.tokenContract = instance;
             console.log('Token contract loaded successfully.');
             resolve(instance);
-          }).catch(function(err) {
+          }).catch(function (err) {
             reject(self.formatError(err, AppError.FAILED_LOADING_CONTRACT));
           });
         } catch (ex) {
           reject(self.formatError('Error in accessing token contract! ' + ex.valueOf(), AppError.FAILED_LOADING_CONTRACT));
         }
-      }).fail(function() {
+      }).fail(function () {
         reject(self.formatError('Failed loading token contract!'));
       });
     });
   },
 
-  loadAccount: function() {
+  loadAccount: function () {
     var self = this;
-    return new Promise(function(resolve, reject) {
-      web3.eth.getAccounts(function(error, accounts) {
+    return new Promise(function (resolve, reject) {
+      web3.eth.getAccounts(function (error, accounts) {
+        console.log(error, accounts);
         var account = accounts[0];
         if (account === undefined) {
           reject(self.formatError('Account not found, please unlock your Metamask account',
@@ -166,14 +187,14 @@ window.TokenLockupApp = {
     });
   },
 
-  loadContractState: function() {
+  loadContractState: function () {
     var self = this;
     return Promise.all([
       this.getEventEnded(),
       this.getLockupRecord(true),
       this.getLockupRecord(false),
       this.getMaximumLockupAmount(),
-    ]).then(function() {
+    ]).then(function () {
       if (self.eventEnded) {
         var promises = [];
         if (self.privateSaleLockupRecord.value > 0 &&
@@ -189,27 +210,27 @@ window.TokenLockupApp = {
     });
   },
 
-  getTokenContractAddress: function() {
+  getTokenContractAddress: function () {
     var self = this;
-    return this.lockupContract.token.call().then(function(address) {
+    return this.lockupContract.token.call().then(function (address) {
       self.tokenContractAddress = address;
       // console.log('token contract address:', address);
       return address;
     });
   },
 
-  getEventEnded: function() {
+  getEventEnded: function () {
     var self = this;
-    return this.lockupContract.hasEnded.call().then(function(eventEnded) {
+    return this.lockupContract.hasEnded.call().then(function (eventEnded) {
       self.eventEnded = eventEnded;
       // console.log('event ended:', eventEnded);
       return eventEnded;
     });
   },
 
-  getLockupRecord: function(isPrivateSale) {
+  getLockupRecord: function (isPrivateSale) {
     var self = this;
-    return this.lockupContract.getLockupRecord.call(isPrivateSale).then(function(record) {
+    return this.lockupContract.getLockupRecord.call(isPrivateSale).then(function (record) {
       var parsedRecord = self._convertLockupRecord(record);
       // console.log('lockup record:', parsedRecord);
       if (isPrivateSale) {
@@ -221,10 +242,10 @@ window.TokenLockupApp = {
     });
   },
 
-  _convertLockupRecord: function(record) {
+  _convertLockupRecord: function (record) {
     var value = parseFloat(web3.fromWei(record[0].toString(10)));
     var lockupPeriod;
-    switch(parseInt(record[1])) {
+    switch (parseInt(record[1])) {
       case 0:
         lockupPeriod = LockupPeriod.THREE_MONTH;
         break;
@@ -247,9 +268,9 @@ window.TokenLockupApp = {
     };
   },
 
-  getMaximumLockupAmount: function() {
+  getMaximumLockupAmount: function () {
     var self = this;
-    return this.lockupContract.earlyLateBirdParticipantsHistory.call(this.account).then(function(purchasedAmount) {
+    return this.lockupContract.earlyLateBirdParticipantsHistory.call(this.account).then(function (purchasedAmount) {
       // Since the returned MDT amount is in smallest unit, we need to convert it to a complete MDT token
       self.maxLockupAmount = parseFloat(web3.fromWei(purchasedAmount.toString(10)));
       // console.log('maximum lockup amount:', self.maxLockupAmount);
@@ -257,31 +278,34 @@ window.TokenLockupApp = {
     });
   },
 
-  getTokenBalance: function() {
+  getTokenBalance: function () {
     var self = this;
-    return this.tokenContract.balanceOf.call(this.account).then(function(balance) {
+    return this.tokenContract.balanceOf.call(this.account).then(function (balance) {
       self.tokenBalance = parseFloat(web3.fromWei(balance.toString(10)));
       // console.log(self.tokenBalance);
       return self.tokenBalance;
     });
   },
 
-  getAvailableLockupAmount: function() {
+  getAvailableLockupAmount: function () {
     return Math.min(this.maxLockupAmount, this.tokenBalance);
   },
 
-  canLockTokens: function() {
+  canLockTokens: function () {
     return !this.eventEnded && this.maxLockupAmount > 0 &&
       (this.earlyLateBirdLockupRecord === null || this.earlyLateBirdLockupRecord.value === 0);
   },
 
-  lockupTokens: function(amount, lockupPeriod) {
+  lockupTokens: function (amount, lockupPeriod) {
     var self = this;
-    return this.tokenContract.transferAndCall(this.lockupContractAddress, amount, lockupPeriod, {from: this.account, gas: 250000})
-      .then(function(tx) {
+    return this.tokenContract.transferAndCall(this.lockupContractAddress, amount, lockupPeriod, {
+        from: this.account,
+        gas: 250000
+      })
+      .then(function (tx) {
         // console.log(tx);
         if (tx.receipt.status === '0x1') {
-          var record = [amount, parseInt(lockupPeriod), new Date().addDays(parseInt(lockupPeriod) === 2 ? 365 : (parseInt(lockupPeriod)+1)*90).getUnixTime(), false, 0];
+          var record = [amount, parseInt(lockupPeriod), new Date().addDays(parseInt(lockupPeriod) === 2 ? 365 : (parseInt(lockupPeriod) + 1) * 90).getUnixTime(), false, 0];
           self.earlyLateBirdLockupRecord = self._convertLockupRecord(record);
           return true;
         } else {
@@ -290,9 +314,9 @@ window.TokenLockupApp = {
       });
   },
 
-  getCanWithdrawTokens: function(isPrivateSale) {
+  getCanWithdrawTokens: function (isPrivateSale) {
     var self = this;
-    return this.lockupContract.canWithdrawTokens.call(isPrivateSale).then(function(canWithdraw) {
+    return this.lockupContract.canWithdrawTokens.call(isPrivateSale).then(function (canWithdraw) {
       if (isPrivateSale) {
         self.canWithdrawPrivateSaleTokens = canWithdraw;
       } else {
@@ -303,10 +327,13 @@ window.TokenLockupApp = {
     });
   },
 
-  withdrawTokens: function(isPrivateSale) {
+  withdrawTokens: function (isPrivateSale) {
     var self = this;
-    return this.lockupContract.withdrawTokens(isPrivateSale, {from: this.account, gas: 200000})
-      .then(function(tx) {
+    return this.lockupContract.withdrawTokens(isPrivateSale, {
+        from: this.account,
+        gas: 200000
+      })
+      .then(function (tx) {
         // console.log(tx);
         if (tx.receipt.status === '0x1') {
           if (isPrivateSale) {
@@ -318,14 +345,20 @@ window.TokenLockupApp = {
             self.earlyLateBirdLockupRecord.withdrawn = true;
             self.earlyLateBirdLockupRecord.withdrawnTime = new Date();
           }
-          return true;
+          return {
+            success: true,
+            delay: false
+          };
         } else {
-          return false;
+          return {
+            success: false,
+            delay: false
+          };
         }
       });
   },
 
-  hasLockedTokens: function(isPrivateSale) {
+  hasLockedTokens: function (isPrivateSale) {
     if (isPrivateSale) {
       return this.privateSaleLockupRecord && this.privateSaleLockupRecord.value > 0;
     } else {
@@ -333,13 +366,13 @@ window.TokenLockupApp = {
     }
   },
 
-  canWithdrawTokens: function(isPrivateSale) {
+  canWithdrawTokens: function (isPrivateSale) {
     return isPrivateSale ? this.canWithdrawPrivateSaleTokens : this.canWithdrawEarlyLateBirdTokens;
   },
 
-  formatError: function(message, errorType) {
+  formatError: function (message, errorType) {
     var err = new Error(message);
-    if (typeof(errorType) === 'number') {
+    if (typeof (errorType) === 'number') {
       err.type = errorType;
     }
     return err;
