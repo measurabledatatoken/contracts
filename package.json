@@ -13,10 +13,11 @@
   "author": "MDT Team",
   "license": "MIT",
   "dependencies": {
+    "babel-register": "^6.26.0",
     "bignumber.js": "^5.0.0",
     "ethereumjs-testrpc": "^6.0.3",
-    "truffle": "^4.0.4",
-    "truffle-hdwallet-provider": "0.0.3",
+    "truffle": "^5.0.31",
+    "truffle-hdwallet-provider": "1.0.16",
     "web3": "^1.0.0-beta.27"
   }
 }

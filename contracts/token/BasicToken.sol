@@ -1,4 +1,4 @@
-pragma solidity ^0.4.11;
+pragma solidity ^0.5.10;
 
 import './ERC20Basic.sol';
 import '../math/SafeMath.sol';
@@ -18,7 +18,7 @@ contract BasicToken is ERC20Basic {
     * @param _value uint256 The amount to be transferred.
     */
     function transfer(address _to, uint256 _value) public returns (bool) {
-        require(_to != address(0));
+        require(_to != address(0), "address cannot be zero");
 
         // SafeMath.sub will throw if there is not enough balance.
         balances[msg.sender] = balances[msg.sender].sub(_value);
@@ -32,7 +32,7 @@ contract BasicToken is ERC20Basic {
     * @param _owner address The address to query the the balance of.
     * @return An uint256 representing the amount owned by the passed address.
     */
-    function balanceOf(address _owner) public constant returns (uint256 balance) {
+    function balanceOf(address _owner) public view returns (uint256 balance) {
         return balances[_owner];
     }
 
