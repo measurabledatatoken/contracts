@@ -18,12 +18,12 @@ module.exports = {
       network_id: '3'
     },
     ropstenInfura: {
-      provider: new HDWalletProvider(credentials.ropstenMnemonic, 'https://ropsten.infura.io/' + credentials.infuraToken),
+      provider: new HDWalletProvider(credentials.ropstenMnemonic, 'https://ropsten.infura.io/v3/' + credentials.infuraToken),
       network_id: 3,
       gas: 712388
     },
     mainnetInfura: {
-      provider: new HDWalletProvider(credentials.mainnetMnemonic, 'https://mainnet.infura.io/' + credentials.infuraToken, 4),
+      provider: new HDWalletProvider(credentials.mainnetMnemonic, 'https://mainnet.infura.io/v3/' + credentials.infuraToken, 4),
       network_id: 1,
       gas: 712388
     }
@@ -33,5 +33,5 @@ module.exports = {
       enabled: true,
       runs: 200
     }
-  }
+  },
 };
